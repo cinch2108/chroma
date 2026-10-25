@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Contrast Checker (WCAG 2.2 AA &amp; AAA) | Chroma</title>
+<meta name="description" content="Check text and background color contrast against WCAG AA and AAA in real time, preview the result, and auto-fix failing colors with one click. Free accessibility tool.">
+<meta name="theme-color" content="#0b0b10">
+<link rel="canonical" href="https://cinch2108.github.io/chroma/contrast-checker/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5c5c'/%3E%3Cstop offset='.5' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%235cd6ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Color Contrast Checker (WCAG 2.2 AA &amp; AAA) | Chroma">
+<meta property="og:description" content="Check text and background color contrast against WCAG AA and AAA in real time, preview the result, and auto-fix failing colors with one click. Free accessibility tool.">
+<meta property="og:url" content="https://cinch2108.github.io/chroma/contrast-checker/">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Chroma","applicationCategory":"DesignApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free color palette generator, contrast checker, gradient maker, color converter and image color picker."}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What contrast ratio do I need for WCAG AA?", "acceptedAnswer": {"@type": "Answer", "text": "WCAG AA requires at least 4.5:1 for normal text and 3:1 for large text (about 24px, or 19px bold) and for icons and UI components. AAA requires 7:1 for normal text and 4.5:1 for large text."}}, {"@type": "Question", "name": "How is the contrast ratio calculated?", "acceptedAnswer": {"@type": "Answer", "text": "It compares the relative luminance of the two colors using the formula in the WCAG specification, giving a ratio from 1:1 (no contrast) to 21:1 (black on white)."}}, {"@type": "Question", "name": "Does the fix button change my brand color?", "acceptedAnswer": {"@type": "Answer", "text": "It only adjusts lightness of the text color and keeps the hue and saturation, so the result still looks like your color, just readable."}}, {"@type": "Question", "name": "Is contrast a legal requirement?", "acceptedAnswer": {"@type": "Answer", "text": "In many places accessibility laws reference WCAG, including the ADA in the US and the European Accessibility Act. Meeting AA contrast is a core part of compliance."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Chroma", "item": "https://cinch2108.github.io/chroma/"}, {"@type": "ListItem", "position": 2, "name": "Contrast", "item": "https://cinch2108.github.io/chroma/contrast-checker/"}]}</script>
+</head>
+<body data-view="contrast">
+<header><div class="nav">
+  <a class="logo" href="../" style="color:inherit;text-decoration:none"><i></i>Chroma</a>
+  <nav class="tabs" id="tabs"><a class="tab" data-v="palette" href="../">Palettes</a><a class="tab" data-v="convert" href="../color-converter/">Converter</a><a class="tab active" data-v="contrast" href="../contrast-checker/">Contrast</a><a class="tab" data-v="gradient" href="../gradient-generator/">Gradients</a><a class="tab" data-v="image" href="../image-color-picker/">From image</a></nav>
+</div></header>
+
+<main>
+<section class="hero">
+  <h1>Contrast checker that <span>fixes colors for you.</span></h1>
+  <p>See your contrast ratio and WCAG pass or fail instantly. If it fails, one click finds the closest color that passes.</p>
+</section>
+<!-- AD SLOT: top leaderboard 970x90 (responsive). Paste ad unit inside. -->
+<div class="ad ad-leader" id="ad-top" data-ad-slot="top" aria-label="Advertisement"></div>
+<div class="layout"><div class="content">
+
+<!-- PALETTE -->
+<section class="view" id="v-palette">
+  <div class="row">
+    <button class="btn primary" id="gen">Generate</button>
+    <span class="hint">or press <kbd>Space</kbd></span>
+    <select id="mode">
+      <option value="auto">Smart random</option><option value="analogous">Analogous</option>
+      <option value="complementary">Complementary</option><option value="split">Split complementary</option>
+      <option value="triadic">Triadic</option><option value="tetradic">Tetradic</option>
+      <option value="mono">Monochrome</option><option value="pastel">Pastel</option>
+      <option value="vivid">Vivid</option><option value="earth">Earthy</option><option value="dark">Dark UI</option>
+    </select>
+    <select id="count"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>10</option></select>
+    <div style="margin-left:auto" class="row">
+      <button class="btn" id="undo">↶ Undo</button>
+      <button class="btn" id="save">♥ Save</button>
+      <button class="btn" id="share">🔗 Share</button>
+      <button class="btn" id="savepng">⬇ PNG</button>
+    </div>
+  </div>
+  <div class="palette" id="palette"></div>
+  <div class="grid2 mt">
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h2 style="margin:0">Export</h2>
+        <select id="expfmt"><option value="css">CSS variables</option><option value="scss">SCSS</option><option value="tw">Tailwind config</option><option value="json">JSON</option><option value="array">Array</option><option value="svg">SVG</option></select></div>
+      <pre class="code mt2" id="export"></pre>
+      <button class="btn mt2" id="copyexp">Copy code</button>
+    </div>
+    <div class="card">
+      <h2>How it looks with color blindness</h2>
+      <p class="hint">About 1 in 12 men see color differently. Check your palette still works.</p>
+      <div class="cbsim" id="cbsim"></div>
+    </div>
+  </div>
+  <div class="card mt"><h2>Your saved palettes</h2><p class="hint" style="margin:-8px 0 12px">Stored only in this browser. Click one to open it.</p><div class="savedgrid" id="saved"></div></div>
+</section>
+
+<!-- CONVERTER -->
+<section class="view" id="v-convert">
+  <div class="grid2">
+    <div class="card">
+      <label class="lbl">Type any color: hex, rgb(), hsl(), oklch() or a name</label>
+      <div class="colorfield"><input type="color" id="cvpick" value="#7c5cff"><input type="text" id="cvin" value="#7c5cff" spellcheck="false"></div>
+      <div class="bigswatch mt" id="cvsw"></div>
+      <div class="mt2 hint" id="cvname"></div>
+    </div>
+    <div class="card" id="fmts"></div>
+  </div>
+  <div class="card mt">
+    <h2>Tints &amp; shades</h2><p class="hint">A full 50–950 scale, ready for a design system. Click any step to copy.</p>
+    <div class="scale" id="scale"></div>
+    <button class="btn mt2" id="copyscale">Copy as Tailwind</button>
+  </div>
+  <div class="card mt">
+    <h2>Color harmonies</h2>
+    <div class="harm" id="harm"></div>
+  </div>
+</section>
+
+<!-- CONTRAST -->
+<section class="view active" id="v-contrast">
+  <div class="grid2">
+    <div class="card">
+      <label class="lbl">Text color</label>
+      <div class="colorfield"><input type="color" id="fgp" value="#ffffff"><input type="text" id="fgt" value="#ffffff"></div>
+      <label class="lbl mt">Background color</label>
+      <div class="colorfield"><input type="color" id="bgp" value="#7c5cff"><input type="text" id="bgt" value="#7c5cff"></div>
+      <div class="row mt2"><button class="btn" id="swap">⇅ Swap</button><button class="btn" id="fix">✨ Fix contrast for me</button></div>
+      <div class="mt"><div class="hint">Contrast ratio</div><div class="ratio" id="ratio">-</div><div class="hint" id="verdict"></div></div>
+      <div class="badges" id="badges"></div>
+    </div>
+    <div class="preview" id="preview">
+      <h3>The quick brown fox</h3>
+      <p>Readable color isn't just nice, it's the law in a lot of places. WCAG asks for 4.5:1 for body text and 3:1 for large text and icons.</p>
+      <small>Small print like captions and footnotes needs the most contrast.</small>
+      <span class="pbtn">Button label</span>
+    </div>
+  </div>
+</section>
+
+<!-- GRADIENT -->
+<section class="view" id="v-gradient">
+  <div class="gprev" id="gprev"></div>
+  <div class="grid2 mt">
+    <div class="card">
+      <div class="row">
+        <select id="gtype"><option value="linear">Linear</option><option value="radial">Radial</option><option value="conic">Conic</option></select>
+        <button class="btn" id="grand">🎲 Random</button>
+        <button class="btn" id="grev">⇄ Reverse</button>
+      </div>
+      <div class="gbar" id="gbar" title="Click to add a stop"></div>
+      <p class="hint">Click the bar to add a stop, drag to move, double-click a stop to remove it.</p>
+      <div class="row mt2">
+        <div class="colorfield"><input type="color" id="gstopc"><input type="text" id="gstopt" style="width:110px"></div>
+        <div style="flex:1;min-width:140px"><label class="lbl" id="anglbl">Angle 90°</label><input type="range" id="gangle" min="0" max="360" value="90"></div>
+      </div>
+      <label class="lbl mt">Smooth mixing</label>
+      <select id="ginterp"><option value="srgb">Standard (sRGB)</option><option value="oklch" selected>Vibrant (OKLCH, no muddy middle)</option></select>
+    </div>
+    <div class="card">
+      <h2>CSS</h2><pre class="code" id="gcss"></pre>
+      <div class="row mt2"><button class="btn" id="gcopy">Copy CSS</button><button class="btn" id="gpng">⬇ Download wallpaper</button></div>
+      <h2 class="mt">Presets</h2><div class="presets" id="presets"></div>
+    </div>
+  </div>
+</section>
+
+<!-- IMAGE -->
+<section class="view" id="v-image">
+  <div class="drop" id="drop"><div style="font-size:34px">🖼️</div><h2 style="margin:8px 0 4px">Drop an image, paste one, or click to upload</h2><p class="hint">We'll extract its palette. Hover the image to pick any exact pixel.</p><input type="file" id="file" accept="image/*" hidden></div>
+  <div class="grid2">
+    <div class="imgwrap" id="imgwrap"><canvas id="cv"></canvas></div>
+    <div id="imgout" style="display:none" class="card mt">
+      <h2>Extracted palette</h2>
+      <div class="palette" id="imgpal" style="height:180px;margin-top:0"></div>
+      <div class="row mt2"><label class="lbl" style="margin:0">Colors</label><input type="range" id="kcount" min="3" max="10" value="6" style="width:160px"><button class="btn" id="imgtopal">Open in palette editor</button></div>
+      <h2 class="mt">Picked pixels</h2><div class="chips" id="picked"><span class="hint">Click the image to pick.</span></div>
+    </div>
+  </div>
+</section>
+</div>
+<aside class="rail"><!-- AD SLOTS: sticky sidebar 300x250 x2 -->
+<div class="ad ad-rect" id="ad-side-1" data-ad-slot="side-1" aria-label="Advertisement"></div><div class="ad ad-rect" id="ad-side-2" data-ad-slot="side-2" aria-label="Advertisement"></div></aside>
+</div>
+<article class="seo">
+<h2>How to use the color contrast checker</h2>
+<ol><li>Enter your text color and background color, or pick them with the color pickers.</li><li>Read the contrast ratio and the pass or fail result for AA and AAA, normal and large text, and UI elements.</li><li>Check the live preview to see headings, body text, small print and a button in your colors.</li><li>If it fails, click <b>Fix contrast for me</b> to get the nearest passing text color that keeps your hue.</li></ol>
+<h2>Frequently asked questions</h2>
+<details><summary>What contrast ratio do I need for WCAG AA?</summary><p>WCAG AA requires at least 4.5:1 for normal text and 3:1 for large text (about 24px, or 19px bold) and for icons and UI components. AAA requires 7:1 for normal text and 4.5:1 for large text.</p></details><details><summary>How is the contrast ratio calculated?</summary><p>It compares the relative luminance of the two colors using the formula in the WCAG specification, giving a ratio from 1:1 (no contrast) to 21:1 (black on white).</p></details><details><summary>Does the fix button change my brand color?</summary><p>It only adjusts lightness of the text color and keeps the hue and saturation, so the result still looks like your color, just readable.</p></details><details><summary>Is contrast a legal requirement?</summary><p>In many places accessibility laws reference WCAG, including the ADA in the US and the European Accessibility Act. Meeting AA contrast is a core part of compliance.</p></details>
+<h2>More free color tools</h2>
+<div class="toollinks"><a href="../">Color Palette Generator<span>Create beautiful color palettes in one click.</span></a><a href="../color-converter/">Color Converter<span>Convert any color between HEX, RGB, HSL, HSV, CMYK, OKLCH, Swift and Android formats instantly.</span></a><a href="../gradient-generator/">CSS Gradient Generator<span>Build smooth CSS gradients with unlimited color stops, linear, radial and conic modes, and vibrant OKLCH mixing.</span></a><a href="../image-color-picker/">Image Color Picker<span>Upload or paste an image to extract its color palette and pick exact pixel colors with a magnifier.</span></a></div>
+</article>
+<!-- AD SLOT: footer 728x90 -->
+<div class="ad ad-foot" id="ad-foot" data-ad-slot="foot" aria-label="Advertisement"></div>
+</main>
+<div class="loupe" id="loupe"></div>
+<div class="toast" id="toast"></div>
+<div class="consent" id="consent"><span>Chroma uses ads to stay free. Your colors and images never leave your device. <a href="../privacy.html">Privacy</a></span><button class="btn" id="c-no">Essential only</button><button class="btn primary" id="c-yes">OK</button></div>
+<footer><div class="footlinks"><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms</a></div><br>Chroma · runs entirely in your browser · press <kbd>Space</kbd> on Palettes for fresh ideas</footer>
+
+<script src="../app.js" defer></script>
+</body>
+</html>
